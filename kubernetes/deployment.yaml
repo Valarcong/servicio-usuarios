@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: servicio-usuarios
-          image: servicio-usuarios:1.0
+          image: servicio-usuarios:1.1
           ports:
             - containerPort: 8081
           env:
