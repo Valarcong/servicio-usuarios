@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicio-usuarios-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicio-usuarios
+  template:
+    metadata:
+      labels:
+        app: servicio-usuarios
+    spec:
+      containers:
+        - name: servicio-usuarios
+          image: servicio-usuarios:1.0
+          ports:
+            - containerPort: 8081
+          env:
+            - name: CONFIG_SERVER_URL
+              value: http://servidor-configuracion-service:8888
+
+            - name: EUREKA_URL
+              value: http://servidor-discovery-service:8761/eureka/
+
+            - name: DB_URL
+              value: jdbc:mysql://host.docker.internal:3306/lms_usuarios
+
+            - name: DB_USER
+              value: root
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: servicio-usuarios-secret
+                  key: DB_PASSWORD
+
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: servicio-usuarios-secret
+                  key: JWT_SECRET
