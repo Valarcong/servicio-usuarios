@@ -112,4 +112,15 @@ public class UsuarioService {
 
         usuarioRepository.delete(usuario);
     }
+    public Usuario obtenerUsuarioPorNombreUsuario(String nombreUsuario) {
+
+        return usuarioRepository.findByNombreUsuario(nombreUsuario)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Usuario no encontrado: " + nombreUsuario
+                        )
+                );
+    }
+
 }

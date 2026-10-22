@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 
 @Service
@@ -21,12 +22,30 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long tiempoExpiracion;
 
-    public String generarToken(UserDetails userDetails) {
+    public String generarToken(
+            UserDetails userDetails,
+            Integer idUsuario
+    ) {
+
+        List<String> roles = userDetails.getAuthorities()
+                .stream()
+                .map(authority ->
+                        authority.getAuthority()
+                                .replace("ROLE_", "")
+                )
+                .toList();
 
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("idUsuario", idUsuario)
+                .claim("roles", roles)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + tiempoExpiracion))
+                .expiration(
+                        new Date(
+                                System.currentTimeMillis()
+                                        + tiempoExpiracion
+                        )
+                )
                 .signWith(obtenerClave())
                 .compact();
     }
