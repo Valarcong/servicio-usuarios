@@ -24,6 +24,9 @@ spec:
             - name: EUREKA_URL
               value: http://servidor-discovery-service:8761/eureka/
 
+            - name: EUREKA_INSTANCE_HOSTNAME
+              value: servicio-usuarios-service
+
             - name: DB_URL
               value: jdbc:mysql://host.docker.internal:3306/lms_usuarios
 
