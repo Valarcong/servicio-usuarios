@@ -60,8 +60,16 @@ public class UsuarioController {
         );
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'DOCENTE')")
+    @GetMapping("/alumnos/{idUsuario}")
+    public ResponseEntity<Usuario> obtenerAlumnoPorId(
+            @PathVariable Integer idUsuario
+    ) {
 
-
+        return ResponseEntity.ok(
+                usuarioService.obtenerAlumnoPorId(idUsuario)
+        );
+    }
 
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PutMapping("/{idUsuario}")

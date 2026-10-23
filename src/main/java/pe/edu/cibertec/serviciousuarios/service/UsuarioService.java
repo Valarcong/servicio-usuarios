@@ -123,4 +123,24 @@ public class UsuarioService {
                 );
     }
 
+    public Usuario obtenerAlumnoPorId(Integer idUsuario) {
+
+        Usuario usuario = obtenerUsuarioPorId(idUsuario);
+
+        boolean esAlumno = usuario.getRoles()
+                .stream()
+                .anyMatch(rol ->
+                        "ALUMNO".equals(rol.getNombre())
+                );
+
+        if (!esAlumno) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El usuario indicado no tiene rol ALUMNO"
+            );
+        }
+
+        return usuario;
+    }
+
 }
